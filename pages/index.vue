@@ -1,5 +1,12 @@
 <script setup lang="ts">
+import type {ICard, IColumn} from "~/components/kanban/kanban.types";
 
+  useSeoMeta({
+    title: 'Home | CRM System'
+  })
+
+  const dragCardRef = ref<ICard | null>(null)
+  const sourceColumnRef = ref<IColumn | null>(null)
 </script>
 
 <template>
@@ -9,7 +16,11 @@
     </h1>
 
     <div>
-      <UiCard />
+      <UiCard class="mb-3" draggable="true">
+        <UiCardHeader role="button">Name card</UiCardHeader>
+        <UiCardContent>Company</UiCardContent>
+        <UiCardFooter>Footer</UiCardFooter>
+      </UiCard>
     </div>
   </div>
 </template>
