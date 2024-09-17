@@ -6,6 +6,7 @@ import type {EnumStatus} from "~/types/deals.types";
 import {COLLECTION_DEALS, DB_ID} from "~/app.constants";
 import {useMutation} from "@tanstack/vue-query";
 import {generateColumnStyle} from "~/components/kanban/generate-gradient";
+import {useDealSlideStore} from "~/store/deal.store";
 
   useSeoMeta({
     title: 'Home | CRM System'
@@ -14,6 +15,7 @@ import {generateColumnStyle} from "~/components/kanban/generate-gradient";
   const dragCardRef = ref<ICard | null>(null)
   const sourceColumnRef = ref<IColumn | null>(null)
   const { data, isLoading, refetch } = useKanbanQuery()
+  const store = useDealSlideStore()
 
   type TypeMutationVariables = {
     docId: string
@@ -57,7 +59,6 @@ import {generateColumnStyle} from "~/components/kanban/generate-gradient";
     <div v-if="isLoading">Loading...</div>
 
     <div v-else>
-
       <div class="grid grid-cols-5 gap-16">
         <div v-for="(column, index) in data"
              :key="column.id"
@@ -78,7 +79,7 @@ import {generateColumnStyle} from "~/components/kanban/generate-gradient";
               v-for="card in column.items" class="mb-3" draggable="true"
               @dragstart="() => handleDragStart(card, column)"
           >
-            <UiCardHeader role="button">
+            <UiCardHeader role="button" @click="store.set(card)">
               <UiCardTitle>{{ card.name }}</UiCardTitle>
               <UiCardDescription class="mt-2 block">
                 {{ convertCurrency(card.price) }}
@@ -96,6 +97,8 @@ import {generateColumnStyle} from "~/components/kanban/generate-gradient";
           </UiCard>
         </div>
       </div>
+
+      <KanbanSlideoverSlideOver />
     </div>
   </div>
 </template>
